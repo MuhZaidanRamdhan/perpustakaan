@@ -1,0 +1,73 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\BorrowingController as AdminBorrowingController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+
+/*
+|--------------------------------------------------------------------------
+| Redirect root
+|--------------------------------------------------------------------------
+*/
+Route::get('/', fn() => view('welcome'));
+/*
+|--------------------------------------------------------------------------
+| PUBLIC (tanpa login)
+|--------------------------------------------------------------------------
+*/
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
+Route::get('/books/{book}/read', [BookController::class, 'read']);
+
+Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
+
+/*
+|--------------------------------------------------------------------------
+| AUTH USER
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+
+    Route::post('/books/{book}/borrow', [BookController::class, 'borrow'])
+        ->name('books.borrow');
+
+    Route::post('/borrow/{book}', [BorrowingController::class, 'store'])
+        ->name('borrow.store');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/borrowings', [AdminBorrowingController::class, 'index'])
+            ->name('borrowings.index');
+
+        Route::post('/borrowings/{borrowing}/approve', [AdminBorrowingController::class, 'approve'])
+            ->name('borrowings.approve');
+
+        Route::post('/borrowings/{borrowing}/return', [AdminBorrowingController::class, 'return'])
+            ->name('borrowings.return');
+
+        Route::delete('/borrowings/{borrowing}', [AdminBorrowingController::class, 'destroy'])
+            ->name('borrowings.destroy');
+
+
+        Route::resource('/books', BookController::class)
+            ->except(['show']);
+    });
+
+require __DIR__ . '/auth.php';
