@@ -3,25 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function index(Request $request)
     {
-        $books = Book::all();
+        $query = Book::with('category');
 
-        if ($request->is('admin/*')) {
-            return view('admin.books.index', compact('books'));
+        if ($request->category) {
+            $query->where('category_id', $request->category);
         }
 
-        return view('books.index', compact('books'));
-    }
+        $userbooks = $query->get();
+        $adminbooks = $query->paginate(5);
+        $categories = Categories::all();
 
+        if ($request->is('admin/*')) {
+            return view('admin.books.index', compact('adminbooks', 'categories'));
+        }
+
+        return view('books.index', compact('userbooks', 'categories'));
+    }
 
     public function create()
     {
-        return view('admin.books.create');
+        $categories = Categories::all();
+        return view('admin.books.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -41,7 +50,9 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-        return view('admin.books.edit', compact('book'));
+        $categories = Categories::all();
+
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
     public function update(Request $request, Book $book)

@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\BorrowingController as AdminBorrowingController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 
 /*
@@ -30,11 +29,11 @@ Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verifi
 */
 Route::middleware('auth')->group(function () {
 
-    Route::post('/books/{book}/borrow', [BookController::class, 'borrow'])
-        ->name('books.borrow');
-
     Route::post('/borrow/{book}', [BorrowingController::class, 'store'])
         ->name('borrow.store');
+
+    Route::get('/my-borrowings', [BorrowingController::class, 'myBorrowings'])->name('borrowings.my');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -53,16 +52,16 @@ Route::middleware(['auth', 'admin'])
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
-        Route::get('/borrowings', [AdminBorrowingController::class, 'index'])
+        Route::get('/borrowings', [BorrowingController::class, 'index'])
             ->name('borrowings.index');
 
-        Route::post('/borrowings/{borrowing}/approve', [AdminBorrowingController::class, 'approve'])
+        Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve'])
             ->name('borrowings.approve');
 
-        Route::post('/borrowings/{borrowing}/return', [AdminBorrowingController::class, 'return'])
+        Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'return'])
             ->name('borrowings.return');
 
-        Route::delete('/borrowings/{borrowing}', [AdminBorrowingController::class, 'destroy'])
+        Route::delete('/borrowings/{borrowing}', [BorrowingController::class, 'destroy'])
             ->name('borrowings.destroy');
 
 

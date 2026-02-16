@@ -24,6 +24,16 @@
         <input type="number" name="stock" class="w-full border p-2 rounded">
     </div>
 
+     <select name="category_id" class="border p-2 w-full">
+    <option value="">-- Pilih Kategori --</option>
+    @foreach($categories as $category)
+        <option value="{{ $category->id }}"
+            {{ old('category_id', $book->category_id ?? '') == $category->id ? 'selected' : '' }}>
+            {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+
     <button class="bg-blue-500 text-white px-4 py-2 rounded">
         Simpan
     </button>

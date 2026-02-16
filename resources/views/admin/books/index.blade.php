@@ -24,15 +24,17 @@
                 <th class="p-3 text-left">Judul</th>
                 <th class="p-3 text-left">Author</th>
                 <th class="p-3 text-center">Stock</th>
+                <th class="p-3 text-left">Kategori</th>
                 <th class="p-3 text-center">Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($books as $book)
+            @foreach($adminbooks as $book)
             <tr class="border-t">
                 <td class="p-3">{{ $book->title }}</td>
                 <td class="p-3">{{ $book->author }}</td>
                 <td class="p-3 text-center">{{ $book->stock }}</td>
+                <td>{{ $book->category->name ?? '-' }}</td>
                 <td class="p-3 text-center space-x-2">
                     <a href="{{ route('admin.books.edit', $book) }}"
                        class="text-blue-500">Edit</a>
@@ -52,8 +54,7 @@
         </tbody>
     </table>
 </div>
-
 <div class="mt-4">
-    {{ $books->links() }}
+    {{ $adminbooks->links() }}
 </div>
 @endsection
