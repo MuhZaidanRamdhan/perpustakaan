@@ -9,10 +9,24 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
-    theme: {
+   theme: {
         extend: {
+            colors: {
+                primary: "#38bdf8",
+                accent: "#facc15",
+                "background-light": "#ffffff",
+                "background-soft": "#f0f9ff",
+                "text-main": "#1e293b",
+            },
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ["Lexend", "sans-serif"],
+                body: ["Comic Neue", "cursive"],
+            },
+            borderRadius: {
+                DEFAULT: "0.5rem",
+                lg: "1rem",
+                xl: "1.5rem",
+                full: "9999px",
             },
         },
     },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivitiesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowingController;
@@ -22,6 +23,11 @@ Route::get('/books/{book}/read', [BookController::class, 'read']);
 
 Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/home', fn() => view('pages.homepage'))->name('Home');
+Route::get('/collection', fn() => view('pages.collectionpage'))->name('Collection');
+Route::get('/activities', [ActivitiesController::class, 'index'])
+    ->middleware('auth')
+    ->name('Activities');
 /*
 |--------------------------------------------------------------------------
 | AUTH USER
