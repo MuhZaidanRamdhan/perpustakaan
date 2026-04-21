@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 | Redirect root
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('welcome'));
+Route::get('/', fn() => view('pages.homepage'))->middleware('guest');
 /*
 |--------------------------------------------------------------------------
 | PUBLIC (tanpa login)
@@ -21,9 +21,8 @@ Route::get('/', fn() => view('welcome'));
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
 Route::get('/books/{book}/read', [BookController::class, 'read']);
 
-Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/home', fn() => view('pages.homepage'))->name('Home');
 Route::get('/collection', fn() => view('pages.collectionpage'))->name('Collection');
 Route::get('/activities', [ActivitiesController::class, 'index'])
     ->middleware('auth')
@@ -34,6 +33,8 @@ Route::get('/activities', [ActivitiesController::class, 'index'])
 |--------------------------------------------------------------------------
 */
 Route::middleware('auth')->group(function () {
+
+    Route::get('/home', fn() => view('pages.homepage'))->name('Home');
 
     Route::post('/borrow/{book}', [BorrowingController::class, 'store'])
         ->name('borrow.store');
@@ -64,12 +65,17 @@ Route::middleware(['auth', 'admin'])
         Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve'])
             ->name('borrowings.approve');
 
+        Route::post('/borrowings/{borrowing}/reject', [BorrowingController::class, 'reject'])
+            ->name('borrowings.reject');
+
+        Route::post('/borrowings/{borrowing}/borrow', [BorrowingController::class, 'borrow'])
+            ->name('borrowings.borrow');
+
         Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'return'])
             ->name('borrowings.return');
 
         Route::delete('/borrowings/{borrowing}', [BorrowingController::class, 'destroy'])
             ->name('borrowings.destroy');
-
 
         Route::resource('/books', BookController::class)
             ->except(['show']);

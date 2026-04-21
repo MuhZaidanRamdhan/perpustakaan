@@ -15,67 +15,6 @@ class BorrowingController extends Controller
         return view('admin.borrowings.index', compact('borrowings'));
     }
 
-    public function myBorrowings()
-    {
-        $borrowings = Borrowing::with('book')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
-
-        return view('borrowings.index', compact('borrowings'));
-    }
-
-
-    public function approve(Borrowing $borrowing)
-    {
-        if ($borrowing->status !== 'pending') {
-            return back()->with('error', 'Hanya peminjaman pending yang bisa di-approve.');
-        }
-
-        if ($borrowing->book->stock <= 0) {
-            return back()->with('error', 'Stok buku habis.');
-        }
-
-        $borrowing->update([
-            'status' => 'approved',
-            'borrowed_at' => now(),
-        ]);
-
-        $borrowing->book->decrement('stock');
-
-        return back()->with('success', 'Peminjaman berhasil di-approve.');
-    }
-
-
-    public function return(Borrowing $borrowing)
-    {
-        if ($borrowing->status !== 'approved') {
-            return back()->with('error', 'Hanya buku approved yang bisa dikembalikan.');
-        }
-
-        $borrowing->update([
-            'status' => 'returned',
-            'returned_at' => now(),
-        ]);
-
-        $borrowing->book->increment('stock');
-
-        return back()->with('success', 'Buku berhasil dikembalikan.');
-    }
-
-
-    public function destroy(Borrowing $borrowing)
-    {
-        if ($borrowing->status === 'approved') {
-            return back()->with('error', 'Tidak bisa hapus peminjaman yang masih aktif.');
-        }
-
-        $borrowing->delete();
-
-        return back()->with('success', 'Data peminjaman dihapus.');
-    }
-
-
     public function store(Book $book)
     {
         // cek stok
@@ -100,5 +39,79 @@ class BorrowingController extends Controller
         ]);
 
         return back()->with('success', 'Permintaan peminjaman dikirim');
+    }
+
+    public function myBorrowings()
+    {
+        $borrowings = Borrowing::with('book')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('borrowings.index', compact('borrowings'));
+    }
+
+
+    public function approve(Borrowing $borrowing)
+    {
+        $borrowing->update([
+            'status' => 'approved',
+        ]);
+
+        return back()->with('success', 'Pengajuan disetujui');
+    }
+
+    public function reject(Borrowing $borrowing)
+    {
+        $borrowing->update([
+            'status' => 'rejected',
+        ]);
+
+        return back()->with('success', 'Pengajuan ditolak');
+    }
+
+    public function borrow(Request $request, Borrowing $borrowing)
+    {
+        $request->validate([
+            'due_date' => 'required|date|after_or_equal:today'
+        ]);
+
+        $hasActive = Borrowing::where('user_id', $borrowing->user_id)
+            ->where('status', 'borrowed')
+            ->exists();
+
+        $borrowing->update([
+            'status' => 'borrowed',
+            'borrowed_at' => Carbon::now(),
+            'due_date' => $request->due_date,
+        ]);
+
+        if ($hasActive) {
+            return back()->with('error', 'User masih memiliki buku yang belum dikembalikan');
+        }
+
+        // kurangi stok
+        $borrowing->book->decrement('stock');
+
+        return back()->with('success', 'Buku berhasil dipinjamkan');
+    }
+
+    public function return(Borrowing $borrowing)
+    {
+        $borrowing->update([
+            'status' => 'returned',
+            'returned_at' => Carbon::now(),
+        ]);
+
+        $borrowing->book->increment('stock');
+
+        return back()->with('success', 'Buku dikembalikan');
+    }
+
+    public function destroy(Borrowing $borrowing)
+    {
+        $borrowing->delete();
+
+        return back()->with('success', 'Data peminjaman dihapus');
     }
 }

@@ -14,8 +14,15 @@ class ActivitiesController extends Controller
             ->latest()
             ->get();
 
-        $activeBorrowings = $borrowings->where('returned_at', null);
-        $historyBorrowings = $borrowings->where('returned_at', '!=', null);
+        // aktif (tidak termasuk rejected)
+        $activeBorrowings = $borrowings
+            ->whereNull('returned_at')
+            ->where('status', '!=', 'rejected');
+
+        // history = returned + rejected
+        $historyBorrowings = $borrowings
+            ->whereNotNull('returned_at')
+            ->merge($borrowings->where('status', 'rejected'));
 
         return view('pages.activitiespage', compact('activeBorrowings', 'historyBorrowings'));
     }

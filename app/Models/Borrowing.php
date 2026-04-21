@@ -10,6 +10,7 @@ class Borrowing extends Model
         'user_id',
         'book_id',
         'status',
+        'due_date',
         'borrowed_at',
         'returned_at',
     ];
