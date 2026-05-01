@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ActivitiesController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowingController;
@@ -12,7 +14,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 | Redirect root
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('pages.homepage'))->middleware('guest');
+Route::get('/', [HomeController::class, 'page'])->middleware('guest');
 /*
 |--------------------------------------------------------------------------
 | PUBLIC (tanpa login)
@@ -23,10 +25,12 @@ Route::get('/books/{book}/read', [BookController::class, 'read']);
 
 // Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/collection', fn() => view('pages.collectionpage'))->name('Collection');
 Route::get('/activities', [ActivitiesController::class, 'index'])
     ->middleware('auth')
     ->name('Activities');
+
+// Route::get('/collection', [CollectionController::class, 'page'])->name('collection');
+Route::get('/collection', [CollectionController::class, 'index'])->name('collection');
 /*
 |--------------------------------------------------------------------------
 | AUTH USER
@@ -34,7 +38,7 @@ Route::get('/activities', [ActivitiesController::class, 'index'])
 */
 Route::middleware('auth')->group(function () {
 
-    Route::get('/home', fn() => view('pages.homepage'))->name('Home');
+    Route::get('/home', [HomeController::class, 'page'])->name('Home');
 
     Route::post('/borrow/{book}', [BorrowingController::class, 'store'])
         ->name('borrow.store');

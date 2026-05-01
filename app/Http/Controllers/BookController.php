@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Categories;
 use Illuminate\Http\Request;
+use Storage;
 
 class BookController extends Controller
 {
@@ -35,13 +36,25 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required',
             'author' => 'required',
             'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'ebook_file' => 'nullable|mimes:pdf|max:10240',
+            'category_id' => 'required|exists:categories,id'
+
         ]);
 
-        Book::create($request->all());
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('books', 'public');
+        }
+
+        if ($request->hasFile('ebook_file')) {
+            $data['ebook_file'] = $request->file('ebook_file')->store('ebooks', 'public');
+        }
+
+        Book::create($data);
 
         return redirect()
             ->route('admin.books.index')
@@ -57,13 +70,30 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required',
             'author' => 'required',
             'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'ebook_file' => 'nullable|mimes:pdf|max:10240',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
-        $book->update($request->all());
+        if ($request->hasFile('image')) {
+            if ($book->image) {
+                Storage::disk('public')->delete($book->image);
+            }
+            $data['image'] = $request->file('image')->store('books', 'public');
+        }
+
+        if ($request->hasFile('ebook_file')) {
+            if ($book->ebook_file) {
+                Storage::disk('public')->delete($book->ebook_file);
+            }
+            $data['ebook_file'] = $request->file('ebook_file')->store('ebooks', 'public');
+        }
+
+        $book->update($data);
 
         return redirect()
             ->route('admin.books.index')
@@ -72,6 +102,14 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
+        if ($book->image) {
+            Storage::disk('public')->delete($book->image);
+        }
+
+        if ($book->ebook_file) {
+            Storage::disk('public')->delete($book->ebook_file);
+        }
+
         $book->delete();
 
         return back()->with('success', 'Buku berhasil dihapus');

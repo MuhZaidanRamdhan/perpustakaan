@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center px-4 bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center px-4 py-4 bg-gray-100">
 
         <div
             class="w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100

@@ -18,33 +18,90 @@
 
     <div class="bg-white rounded shadow overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse min-w-[600px]">
+            <table class="w-full text-sm border-collapse min-w-[800px]">
                 <thead class="bg-gray-100">
                     <tr>
+                        <th class="p-3 text-center">Cover</th>
                         <th class="p-3 text-left">Judul</th>
                         <th class="p-3 text-left">Author</th>
                         <th class="p-3 text-center">Stock</th>
                         <th class="p-3 text-left">Kategori</th>
+                        <th class="p-3 text-center">Ebook PDF</th>
                         <th class="p-3 text-center">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach ($adminbooks as $book)
-                        <tr class="border-t">
-                            <td class="p-3">{{ $book->title }}</td>
-                            <td class="p-3">{{ $book->author }}</td>
-                            <td class="p-3 text-center">{{ $book->stock }}</td>
-                            <td>{{ $book->category->name ?? '-' }}</td>
-                            <td class="p-3 text-center space-x-2">
-                                <a href="{{ route('admin.books.edit', $book) }}" class="text-blue-500">Edit</a>
+                        <tr class="border-t hover:bg-gray-50">
 
-                                <form action="{{ route('admin.books.destroy', $book) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button onclick="return confirm('Yakin hapus?')" class="text-red-500">
-                                        Hapus
-                                    </button>
-                                </form>
+                            {{-- COVER --}}
+                            <td class="p-3 text-center">
+                                @if ($book->image)
+                                    <img src="{{ asset('storage/' . $book->image) }}"
+                                        class="w-16 h-24 object-cover rounded-xl mx-auto shadow-sm">
+                                @else
+                                    <img src="https://picsum.photos/seed/{{ $book->id }}/80/120"
+                                        class="w-16 h-24 object-cover rounded-xl mx-auto shadow-sm">
+                                @endif
+                            </td>
+
+                            {{-- TITLE --}}
+                            <td class="p-3 font-medium">
+                                {{ $book->title }}
+                            </td>
+
+                            {{-- AUTHOR --}}
+                            <td class="p-3">
+                                {{ $book->author }}
+                            </td>
+
+                            {{-- STOCK --}}
+                            <td class="p-3 text-center">
+                                {{ $book->stock }}
+                            </td>
+
+                            {{-- CATEGORY --}}
+                            <td class="p-3">
+                                <span
+                                    class="px-3 py-1 rounded-full text-xs font-semibold
+                                        {{ $book->category->name == 'Fiksi' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600' }}">
+                                    {{ $book->category->name }}
+                                </span>
+                            </td>
+
+                            {{-- PDF --}}
+                            <td class="p-3 text-center">
+                                @if ($book->ebook_file)
+                                    <a href="{{ asset('storage/' . $book->ebook_file) }}" target="_blank"
+                                        class="text-blue-600 font-medium underline">
+                                        Lihat PDF
+                                    </a>
+                                @else
+                                    <span class="text-gray-400">
+                                        PDF tidak tersedia
+                                    </span>
+                                @endif
+                            </td>
+
+                            {{-- ACTION --}}
+                            <td class="p-3 text-center space-x-2">
+                                <div class="flex justify-center gap-2">
+                                    <a href="{{ route('admin.books.edit', $book) }}"
+                                        class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium">
+                                        Edit
+                                    </a>
+
+                                    <form action="{{ route('admin.books.destroy', $book) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button onclick="return confirm('Yakin hapus?')"
+                                            class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-medium">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

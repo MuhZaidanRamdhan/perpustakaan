@@ -10,6 +10,7 @@ class Book extends Model
         'title',
         'author',
         'stock',
+        'image',
         'ebook_file',
         'category_id',
     ];

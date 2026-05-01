@@ -17,8 +17,8 @@
 
             {{-- Desktop Menu --}}
             <nav class="hidden md:flex items-center gap-8">
-                <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('Home') }}">Beranda</a>
-                <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('Collection') }}">Koleksi</a>
+                <a class="text-slate-600 hover:text-sky-600 font-bold" href="/">Beranda</a>
+                <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('collection') }}">Koleksi</a>
                 <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('Activities') }}">Aktivitas</a>
             </nav>
 
@@ -27,12 +27,12 @@
 
                 @guest
                     <a href="{{ route('login') }}" class="text-slate-600 hover:text-sky-600 font-semibold">
-                        Sign In
+                        Masuk
                     </a>
 
                     <a href="{{ route('register') }}"
                         class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-5 py-2 rounded-full font-bold shadow-md transition">
-                        Register
+                        Daftar
                     </a>
                 @endguest
 
@@ -56,13 +56,38 @@
 
                         {{-- Dropdown --}}
                         <div x-show="dropdown" @click.away="dropdown = false" x-transition
-                            class="absolute right-0 mt-3 w-44 bg-white rounded-xl shadow-lg border border-slate-100 p-2">
+                            class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg border border-slate-100 p-2">
+                            <div class="flex items-center gap-3 px-4 py-3 border-b border-slate-100">
 
-                            <form method="POST" action="{{ route('logout') }}">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                </div>
+
+                                <div class="min-w-0">
+                                    <p class="text-sm font-bold text-slate-800 truncate">
+                                        {{ auth()->user()->name }}
+                                    </p>
+
+                                    <p class="text-xs text-slate-500 truncate mt-1">
+                                        {{ auth()->user()->email }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- LOGOUT --}}
+                            <form method="POST" action="{{ route('logout') }}" class="mt-2">
                                 @csrf
                                 <button type="submit"
-                                    class="w-full text-left px-4 py-2 rounded-lg hover:bg-red-50 hover:text-red-600 text-sm transition">
-                                    Logout
+                                    class="w-full text-left px-4 py-3 rounded-xl hover:bg-red-50 hover:text-red-600 text-sm transition">
+
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[18px]">
+                                            logout
+                                        </span>
+                                        Keluar
+                                    </div>
+
                                 </button>
                             </form>
 
@@ -88,34 +113,57 @@
             <div class="flex flex-col gap-4 pt-4 border-t border-slate-200">
 
                 <a class="text-slate-600 hover:text-sky-600 font-bold" href="/">Beranda</a>
-                <a class="text-slate-600 hover:text-sky-600 font-bold" href="/koleksi">Koleksi</a>
-                <a class="text-slate-600 hover:text-sky-600 font-bold" href="/aktivitas">Aktivitas</a>
+                <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('collection') }}">Koleksi</a>
+                <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('Activities') }}">Aktivitas</a>
 
                 <div class="border-t pt-4 flex flex-col gap-3">
 
                     @guest
-                        <a href="{{ route('login') }}" class="text-slate-600 hover:text-sky-600 font-semibold">
-                            Sign In
+                        <a href="{{ route('login') }}"
+                            class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-5 py-2 rounded-full font-bold text-center">
+                            Masuk
                         </a>
 
                         <a href="{{ route('register') }}"
                             class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-5 py-2 rounded-full font-bold text-center">
-                            Register
+                            Daftar
                         </a>
                     @endguest
 
 
                     @auth
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-4 pt-4 border-t border-slate-100">
 
-                            <p class="font-semibold text-slate-700">
-                                {{ Auth::user()->name }}
-                            </p>
+                            {{-- USER INFO --}}
+                            <div class="flex items-center gap-3">
 
+                                <div
+                                    class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-slate-700 truncate">
+                                        {{ Auth::user()->name }}
+                                    </p>
+
+                                    <p class="text-sm text-slate-500 truncate">
+                                        {{ Auth::user()->email }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- LOGOUT --}}
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="text-red-600 font-semibold text-left">
-                                    Logout
+                                <button type="submit"
+                                    class="w-full flex items-center justify-center gap-2 text-red-600 font-semibold py-2 rounded-xl hover:bg-red-50 transition">
+
+                                    <span class="material-symbols-outlined text-[18px]">
+                                        logout
+                                    </span>
+
+                                    Keluar
                                 </button>
                             </form>
 

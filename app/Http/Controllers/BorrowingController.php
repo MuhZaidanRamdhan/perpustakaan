@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Borrowing;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 
 class BorrowingController extends Controller
@@ -19,17 +20,22 @@ class BorrowingController extends Controller
     {
         // cek stok
         if ($book->stock <= 0) {
-            return back()->with('error', 'Stok buku habis');
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok buku habis'
+            ], 400);
         }
 
-        // cegah pinjam ganda
         $alreadyBorrow = Borrowing::where('user_id', auth()->id())
             ->where('book_id', $book->id)
-            ->whereIn('status', ['pending', 'approved'])
+            ->whereNotIn('status', ['returned', 'rejected'])
             ->exists();
 
         if ($alreadyBorrow) {
-            return back()->with('error', 'Kamu sudah meminjam / sedang menunggu buku ini');
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah meminjam buku ini'
+            ], 400);
         }
 
         Borrowing::create([
@@ -72,28 +78,42 @@ class BorrowingController extends Controller
 
     public function borrow(Request $request, Borrowing $borrowing)
     {
-        $request->validate([
-            'due_date' => 'required|date|after_or_equal:today'
-        ]);
+        try {
+            DB::transaction(function () use ($borrowing, $request) {
 
-        $hasActive = Borrowing::where('user_id', $borrowing->user_id)
-            ->where('status', 'borrowed')
-            ->exists();
+                $activeCount = Borrowing::where('user_id', $borrowing->user_id)
+                    ->where('status', 'borrowed')
+                    ->count();
 
-        $borrowing->update([
-            'status' => 'borrowed',
-            'borrowed_at' => Carbon::now(),
-            'due_date' => $request->due_date,
-        ]);
+                if ($activeCount >= 5) {
+                    throw new \Exception('Maksimal 5 buku yang bisa dipinjam');
+                }
 
-        if ($hasActive) {
-            return back()->with('error', 'User masih memiliki buku yang belum dikembalikan');
+                if ($borrowing->book->stock <= 0) {
+                    throw new \Exception('Stok buku habis');
+                }
+
+                $borrowing->update([
+                    'status' => 'borrowed',
+                    'borrowed_at' => now(),
+                    'due_date' => $request->due_date,
+                ]);
+
+                $updated = $borrowing->book()
+                    ->where('stock', '>', 0)
+                    ->decrement('stock');
+
+                if (!$updated) {
+                    throw new \Exception('Stok buku habis');
+                }
+
+            });
+
+            return back()->with('success', 'Buku berhasil dipinjamkan');
+
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
-
-        // kurangi stok
-        $borrowing->book->decrement('stock');
-
-        return back()->with('success', 'Buku berhasil dipinjamkan');
     }
 
     public function return(Borrowing $borrowing)

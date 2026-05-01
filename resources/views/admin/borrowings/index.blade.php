@@ -10,6 +10,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="mb-4 p-3 rounded-lg bg-red-100 text-red-700">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="bg-white shadow rounded-2xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse min-w-[600px]">

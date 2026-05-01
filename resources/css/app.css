@@ -6,3 +6,7 @@
 * {
   font-family: 'lexend', sans-serif;
 }
+
+html {
+  scroll-behavior: smooth;
+}

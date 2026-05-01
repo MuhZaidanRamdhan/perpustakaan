@@ -95,18 +95,19 @@
                         <x-input-error :messages="$errors->get('password')" class="mt-1 text-xs" />
                     </div>
 
-                    {{-- REMEMBER --}}
-                    <label class="flex items-center gap-2 text-sm text-gray-600">
-                        <input type="checkbox" name="remember" class="rounded">
-                        Ingat saya di perangkat ini
-                    </label>
-
                     {{-- BUTTON --}}
                     <button
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl
                                shadow-md hover:shadow-lg transition active:scale-[0.97]">
                         Masuk Sekarang
                     </button>
+
+                    <p class="text-sm text-center text-gray-600">
+                        Belum punya akun?
+                        <a href="{{ route('register') }}" class="text-blue-600 hover:underline">
+                            Daftar di sini
+                        </a>
+                    </p>
                 </form>
 
                 {{-- FOOTER --}}

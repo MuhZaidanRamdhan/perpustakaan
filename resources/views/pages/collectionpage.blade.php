@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Home')
+@section('title', 'Collection')
 
 @section('content')
     <main class="layout-container flex h-full grow flex-col items-center w-full">
@@ -44,378 +44,269 @@
                 </div>
 
             </div>
+            <div id="collection-top"></div>
             <div
-                class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 w-full sticky top-24 z-40 bg-background-light/95 py-4 backdrop-blur-sm">
+                class="flex flex-col lg:flex-row items-stretch lg:items-center gap-4 w-full lg:sticky lg:top-24 z-40 bg-background-light/95 py-6 backdrop-blur-sm">
 
-                {{-- Wrapper supaya search full --}}
-                <div class="flex w-full gap-3">
+                <form method="GET" action="{{ route('collection') }}#collection-top"
+                    class="flex flex-col sm:flex-row w-full gap-3">
 
-                    {{-- SEARCH FULL WIDTH --}}
+                    {{-- SEARCH --}}
                     <div class="flex-1">
                         <label
-                            class="group flex items-center w-full h-14 rounded-2xl bg-white border-2 border-slate-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/20 transition-all shadow-md">
-
-                            <div class="pl-5 text-slate-400 flex items-center justify-center">
-                                <span
-                                    class="material-symbols-outlined text-2xl group-focus-within:text-primary transition-colors">
-                                    search
-                                </span>
-                            </div>
-
-                            <input
-                                class="w-full h-full bg-transparent border-none text-slate-800 placeholder:text-slate-400 focus:ring-0 px-4 text-lg font-medium"
+                            class="group flex items-center w-full h-14 rounded-2xl bg-white border-2 border-slate-200 
+                                    focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/20 
+                                    transition-all shadow-md overflow-hidden">
+                            <input name="search" value="{{ request('search') }}"
+                                class="w-full h-full bg-transparent border-none px-4 text-lg"
                                 placeholder="Cari judul buku atau pengarang..." />
+                            <div class="pl-5 text-slate-400 flex items-center justify-center px-3">
+                                <button class="material-symbols-outlined text-2xl group-focus-within:text-primary">
+                                    search
+                                </button>
+                            </div>
                         </label>
                     </div>
 
-                    <div class="flex gap-3">
+                    {{-- FILTER BUTTON --}}
+                    <div class="flex gap-3 flex-wrap sm:flex-nowrap overflow-x-auto py-1">
+                        @php
+                            $category = request('category');
+                        @endphp
 
-                        <button
-                            class="flex h-14 items-center gap-2 px-6 rounded-2xl bg-accent-blue text-dark text-base font-bold shadow-md hover:scale-105 transition">
-                            <span class="material-symbols-outlined text-[20px]">
-                                grid_view
-                            </span>
+                        {{-- SEMUA --}}
+                        <a href="{{ route('collection') }}#collection-top"
+                            class="flex h-14 items-center gap-2 px-5 whitespace-nowrap rounded-2xl font-semibold shadow-md transition
+                            {{ !$category ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100' }}">
+
+                            <span class="material-symbols-outlined text-[20px]">apps</span>
+                            Semua
+                        </a>
+
+                        {{-- FIKSI --}}
+                        <a href="{{ route('collection', ['category' => 'Fiksi']) }}#collection-top"
+                            class="flex h-14 items-center gap-2 px-5 whitespace-nowrap rounded-2xl font-semibold shadow-md transition
+                            {{ $category === 'Fiksi' ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100' }}">
+
+                            <span class="material-symbols-outlined text-[20px]">menu_book</span>
                             Fiksi
-                        </button>
+                        </a>
 
-                        <button
-                            class="flex h-14 items-center gap-2 px-6 rounded-2xl bg-white border-2 border-slate-200 text-slate-700 font-bold text-base hover:bg-slate-100 transition">
-                            <span class="material-symbols-outlined text-[20px]">
-                                rocket_launch
-                            </span>
+                        {{-- NON FIKSI --}}
+                        <a href="{{ route('collection', ['category' => 'Non Fiksi']) }}#collection-top"
+                            class="flex h-14 items-center gap-2 px-5 whitespace-nowrap rounded-2xl font-semibold shadow-md transition
+                             {{ $category === 'Non Fiksi' ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100' }}">
+
+                            <span class="material-symbols-outlined text-[20px]">science</span>
                             Non Fiksi
-                        </button>
+                        </a>
 
                     </div>
 
-                </div>
+                </form>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md rotate-3 uppercase tracking-wide">Cerita
-                            Seru</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAynFto-TkjmU-U9cu9HXPkCvtUWoDNkNPGLmkggc9lgSSQEteyDsvU7cf91AVr_kNY0jrBWOWbxefp5P6WHEw-FwjJVRg7QgNs6sM8MnGLZWykMZWdFhSzUKAQ8HPq74GLhUN7SLVo8HzBDd0yLxXKvZdIpHlDRX_Jkm29h0EoaaxZDbyzt6dPvnzMPqA79SHXe2or11aGb2WjhgT-P907dgOWYgHqLiN82hQ_VfmcftugD7JZRDW3TgXb3wLo0m5j6i0ky687mp8");'>
+
+                @foreach ($books as $book)
+                    <div class="group relative flex flex-col h-full bg-white rounded-3xl p-4 shadow-soft border">
+
+                        {{-- CATEGORY --}}
+                        {{-- <div class="absolute top-3 -right-3 z-10">
+                            <span
+                                class="px-3 py-1 rounded-full text-xs font-bold text-white
+                                {{ $book->category->name == 'Fiksi' ? 'bg-tag-fun' : 'bg-tag-science' }}">
+                                {{ $book->category->name }}
+                            </span>
+                        </div> --}}
+
+                        {{-- IMAGE --}}
+                        <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4">
+
+                            {{-- IMAGE --}}
+                            <div class="absolute inset-0 bg-cover bg-center"
+                                style="background-image: url('{{ $book->image ? asset('storage/' . $book->image) : 'https://picsum.photos/seed/' . $book->id . '/300/400' }}')">
+                            </div>
+
+                            {{-- STATUS (PINDAH KE SINI) --}}
+                            @php
+                                $borrow = $userBorrowings[$book->id] ?? null;
+                            @endphp
+
+                            <div class="absolute top-3 left-3 z-10">
+                                @if ($borrow)
+                                    <span
+                                        class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700 shadow">
+                                        Dipinjam
+                                    </span>
+                                @elseif ($book->stock <= 0)
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-600 shadow">
+                                        Habis
+                                    </span>
+                                @else
+                                    <span
+                                        class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-600 shadow">
+                                        Tersedia
+                                    </span>
+                                @endif
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star_half</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.8)</span>
+
+                        {{-- CONTENT --}}
+                        <div class="flex flex-col gap-2 flex-grow">
+                            <h3 class="text-lg font-bold line-clamp-2 truncate leading-tight">
+                                {{ $book->title }}
+                            </h3>
+
+                            <p class="text-sm text-gray-500 h-[24px]">
+                                {{ $book->author }}
+                            </p>
                         </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            The Great Gatsby</h3>
-                        <p class="text-slate-500 text-sm font-semibold">F. Scott Fitzgerald</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md -rotate-2 uppercase tracking-wide">Fiksi</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDESRMyIVuZehGq3YDzaLrfPYJ6yaXsKYWxWEWKLxrGZx_cJDkV19rTjxNODMr4EqgoUHXih19QUUeu5e_wf12lVt0xTbttHfSAjPelcq2ihgLY6rcnJhZNf-Smtz4aEsaTdpsgMojYYV7h87iYNM35xK9ArrLxDonaxPLM8BbwRe1h2hDKYGfzyDZ-gUsmVOpck7JrHqskwGJFHxBIw2S3W9nCoA-yE2fQJqbVsgBQ9JGvyWkRjHXB0cLHwTkYMOF_FJvNmfy3cpE");'>
+                        @php
+                            $borrow = $userBorrowings[$book->id] ?? null;
+                        @endphp
+                        {{-- ACTION --}}
+                        <div class="mt-auto pt-4 flex gap-2">
+
+                            @if ($borrow)
+                                {{-- PENDING --}}
+                                @if ($borrow->status === 'pending')
+                                    <button
+                                        class="flex-1  h-10 bg-yellow-100 text-yellow-700 rounded-xl font-semibold cursor-not-allowed">
+                                        Menunggu Persetujuan
+                                    </button>
+
+                                    {{-- APPROVED --}}
+                                @elseif ($borrow->status === 'approved')
+                                    <button
+                                        class="flex-1 h-10 bg-orange-100 text-orange-700 rounded-xl font-semibold cursor-not-allowed">
+                                        Menunggu Diambil
+                                    </button>
+
+                                    {{-- BORROWED --}}
+                                @elseif ($borrow->status === 'borrowed')
+                                    <button
+                                        class="flex-1 h-10 bg-gray-200 text-gray-600 rounded-xl font-semibold cursor-not-allowed">
+                                        Sedang Dipinjam
+                                    </button>
+                                @endif
+
+                                {{-- STOK HABIS --}}
+                            @elseif ($book->stock <= 0)
+                                <button class="flex-1 h-10 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed">
+                                    Stok Habis
+                                </button>
+
+                                {{-- TERSEDIA --}}
+                            @else
+                                <form action="{{ route('borrow.store', $book->id) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <button
+                                        class="w-full h-10 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-semibold">
+                                        Pinjam
+                                    </button>
+                                </form>
+                            @endif
+
+                            {{-- READ --}}
+                            @if ($book->ebook_file)
+                                <a href="{{ asset('storage/' . $book->ebook_file) }}" target="_blank"
+                                    class="w-10 h-10 bg-green-600 text-white rounded-xl flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[20px]">
+                                        menu_book
+                                    </span>
+                                </a>
+                            @endif
+
                         </div>
+
                     </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl text-slate-200">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.0)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Norwegian Wood</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Haruki Murakami</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-slate-200 text-slate-500 font-bold text-base flex items-center justify-center gap-2 cursor-not-allowed">
-                        <span class="material-symbols-outlined">schedule</span>
-                        Antrian
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-science text-white text-xs font-black shadow-md rotate-1 uppercase tracking-wide">Sains
-                            &amp; Alam</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAr_YkeonWNHi7eAmmvUEMZXwCMf_feV0fY13G7H84v2wdmdfEHhp2OeurUAvYgvd6irJBXMYCKYelRY2TsusASNiVAyCIoHcWtlpdFq-L03fgzbm4w_gnfXvqdfhiFA08--ewYEKl_-FDQZeSnHXLxsq1QjgIrM-aYytk7DFbsCB3YW1UA2oZ6G-Q70EGX5JhhYztpgVxDU-qnCfY00ycjmXbrBGihqnQlyOmQhq8CFGzsQyw9tNqTsR1RwiYxFKfWJN6wXfRTD58");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(5.0)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Dune</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Frank Herbert</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-slate-500 text-white text-xs font-black shadow-md -rotate-3 uppercase tracking-wide">Filsafat</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAOny9M9LJwsXbyeNVcouv_2XpsG1uafycCBIwpzO7id_dYXV2yfIKhsRKzgQ9ZfgEeg0U7iYAV74HDmOw7v1raJ8ca_6cg_aK8OJyVPqvtPYib4X9sDfrC-TXkEQpTcXuZGz76DiKx0tI-swI9TBLzuBlVxVSFU_gu8Ghne-RJvnU5fpsaq_tComcRDanhYq2ZUMBvWph53YHbd-o80YW9w63G1ioApmaGO9R3Jt4T0nqt-bwjH4KKAfEVjtwBHjygoZzDGFANI0M");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl text-slate-200">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.2)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Meditations</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Marcus Aurelius</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-science text-white text-xs font-black shadow-md rotate-2 uppercase tracking-wide">Psikologi</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZlX0KNBoCEw_V-BxkXt20p8knZx25MtXPAjXI9y2vMQe2rmZ2ZaTXqzFDXWAgSNP_754ZKcZRj8pwLiCQYXBmQ4EnCNQmKUp94Tkudz5PsUYNT1v5vauEAL9qnOq2a9uFdeDOxQtC6JJqQzm08PlXsKPNa99ZybJYtg3i3KHdBPTo0IsHVkn1xEMIiFAU7hne9CBbSOCf8eUNZ99eRFcUnX4mDfwVkTIwfWIsnDPx874vQRNhxvmCbIUkaC0GoBiqeTNCkfhcezw");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star_half</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.6)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Thinking, Fast and Slow</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Daniel Kahneman</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md -rotate-1 uppercase tracking-wide">Sejarah</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuANb127GCyoyEqe16sSeTI6JrbaLLecDGiQBXexpIk9mkYgrcNbi-0_zga1xfmf7tmJmv9y1lDY_37dMAtCPZQDHKITikGmJEeFH965pGUbboQG6rjW-PxtemahNbfHnsR1xdWN9QpMSmT1rq6jwLWcJgjP56wm_YQ-n1kQcFx7i6gr7ya1EuoVTEafzJBP06gRekqaykYOEUVK2HVJNS0PKWV3vEtGh1Z5fUw-iTBTn6EJT5Bl76c5_RKo80AIRYTpjGFn6qp8ZDg");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.9)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Sapiens</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Yuval Noah Harari</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md rotate-3 uppercase tracking-wide">Biografi</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLlh7BjiO9UU7DmAh5wtFaapXJEzR-YBOJgEdwpiOtUmDMSjGA2mbBMZ3Kw9kZSnykqCpkdePqbcjW09FJJGQsfnqu0n_s7K8xxclVGKJCp37h1FSnog-Sz6Eg4OC6zXR07g_7C8ukySh8mtwhA7OdqARTVEXv-J4z9JUSMBRNCcwUYpduvopIDcFxVtixVAgyPfvLQD7pazQ7bduJlcfOczNU-Neltz-bGbQyhXKQiIi_7du85EEKRvci9zWWKLwO7RlLUzx7jYU");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl text-slate-200">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.3)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Educated</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Tara Westover</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-comic text-white text-xs font-black shadow-md -rotate-2 uppercase tracking-wide">Seni</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChaBfoIrBN-rcs0TtcwgdscsYbS8NDsTSfDZKZym3NdUZV6FRJJgZP9q8_Do1KvLFOwTN87NWMdrhNoa2CkRXSFc-nGh5qzAMG-kW4LWxODs4q1FdX9ckenNifOo1R8K5TwAQEBFFvjurvlf3rE5h--OCyqlIaOvT_3SaAB_TUT_wztiZYU7RgYSOL7_6C9sIauEHadAcOlBvfVMLSMV0xVaOSHQfnT2tqcmgv7i58nghBI0FtGd-oMaov54oh8xwpjMmX7GdeY5c");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star_half</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.5)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            Design as Art</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Bruno Munari</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-slate-200 text-slate-500 font-bold text-base flex items-center justify-center gap-2 cursor-not-allowed">
-                        <span class="material-symbols-outlined">schedule</span>
-                        Antrian
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md rotate-1 uppercase tracking-wide">Fiksi</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCcsjgXMyEwJP5cSmiKxSiwIk1lBkZZRj8GalGysrYeLXyGP83FE3z76izMrckmHtyMrkNo-QNRFyHH9oW_XmY0WoOvmbuKy5xrKXjMU6KNsz9FnESRYONbMXr5mDq_2-OPJDojS7oQ62sj0rO9ot7JUJnXuX5066J0_U-vuvayaER3uWqj7PPZSkKiJumPbKB8aqCwcecLYXWWJ_U9DpaKBgRCeXGtRYov4m5-X8vuCxqjBUWP5-vbmKLnBqPW96Jln3m31UdllLs");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(5.0)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            The Alchemist</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Paulo Coelho</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
-                <div
-                    class="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl p-4 shadow-soft hover:shadow-hover transition-all duration-300 border border-slate-100 dark:border-slate-700">
-                    <div class="absolute -top-3 -right-3 z-10">
-                        <span
-                            class="inline-flex items-center justify-center px-3 py-1 rounded-full bg-tag-fun text-white text-xs font-black shadow-md -rotate-2 uppercase tracking-wide">Thriller</span>
-                    </div>
-                    <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-slate-100">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBOHgRH5mzA8gZHzzZi9t203hR0tHN9kn8Hb64r1GLgVN1eUoscm8GO7KRGpRdVZiv_jL0-a2LW21OIXbtlDyCFEhrSuBhXUIoeeab42RUGLIxB3wU58O-PawHpGbBir-KPQClQ9eoXiyPmcQbscNKqXPBzP2kvO-AwyreCwdf59l8gdAUgbhDWRnvkPYb0oe0ZVYre-DamvATc5ptjvvja_0na0HIQ5wIcCOOnqRSNXoFFXB8KR160NZFD3ws-wyb1Br1XuhaKYVU");'>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-2 flex-grow">
-                        <div class="flex items-center gap-1 text-accent-yellow">
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star</span>
-                            <span class="material-symbols-outlined text-xl fill-1">star_half</span>
-                            <span class="text-slate-400 text-xs font-bold ml-1">(4.7)</span>
-                        </div>
-                        <h3 class="text-accent-blue dark:text-white text-xl font-extrabold leading-snug line-clamp-2">
-                            The Silent Patient</h3>
-                        <p class="text-slate-500 text-sm font-semibold">Alex Michaelides</p>
-                    </div>
-                    <button
-                        class="mt-4 w-full h-12 rounded-xl bg-secondary text-white font-bold text-base shadow-bubbly btn-bounce flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors">
-                        <span class="material-symbols-outlined">menu_book</span>
-                        Pinjam Buku
-                    </button>
-                </div>
+                @endforeach
             </div>
-            <div class="flex items-center justify-center gap-4 py-8">
-                <button
-                    class="flex size-12 items-center justify-center rounded-2xl bg-white border-2 border-slate-100 hover:border-primary text-slate-500 hover:text-primary transition-all shadow-sm">
-                    <span class="material-symbols-outlined text-2xl">chevron_left</span>
-                </button>
-                <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-2xl border-2 border-slate-100">
-                    <button
-                        class="flex size-10 items-center justify-center rounded-xl bg-primary text-white font-bold text-lg shadow-md">1</button>
-                    <button
-                        class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold text-lg transition-colors">2</button>
-                    <button
-                        class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold text-lg transition-colors">3</button>
-                    <span class="text-slate-300 font-bold px-1">...</span>
-                    <button
-                        class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold text-lg transition-colors">12</button>
+            @if ($books->hasPages())
+                <div class="flex items-center justify-center gap-4 py-8">
+
+                    {{-- PREVIOUS --}}
+                    @if ($books->onFirstPage())
+                        <span
+                            class="flex size-12 items-center justify-center rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-2xl">chevron_left</span>
+                        </span>
+                    @else
+                        <a href="{{ $books->previousPageUrl() }}#collection-top"
+                            class="flex size-12 items-center justify-center rounded-2xl bg-white border-2 border-slate-100 hover:border-primary text-slate-500 hover:text-primary transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-2xl">chevron_left</span>
+                        </a>
+                    @endif
+
+
+                    {{-- PAGE NUMBERS --}}
+                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-2xl border-2 border-slate-100">
+
+                        @php
+                            $start = max($books->currentPage() - 2, 1);
+                            $end = min($books->currentPage() + 2, $books->lastPage());
+                        @endphp
+
+                        {{-- FIRST PAGE --}}
+                        @if ($start > 1)
+                            <a href="{{ $books->url(1) }}#collection-top"
+                                class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold">
+                                1
+                            </a>
+
+                            @if ($start > 2)
+                                <span class="text-slate-300 font-bold px-1">...</span>
+                            @endif
+                        @endif
+
+
+                        {{-- MAIN RANGE --}}
+                        @for ($i = $start; $i <= $end; $i++)
+                            @if ($i == $books->currentPage())
+                                <span
+                                    class="flex size-10 items-center justify-center rounded-xl bg-primary text-white font-bold shadow-md">
+                                    {{ $i }}
+                                </span>
+                            @else
+                                <a href="{{ $books->url($i) }}#collection-top"
+                                    class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold transition">
+                                    {{ $i }}
+                                </a>
+                            @endif
+                        @endfor
+
+
+                        {{-- LAST PAGE --}}
+                        @if ($end < $books->lastPage())
+                            @if ($end < $books->lastPage() - 1)
+                                <span class="text-slate-300 font-bold px-1">...</span>
+                            @endif
+
+                            <a href="{{ $books->url($books->lastPage()) }}#collection-top"
+                                class="flex size-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 font-bold">
+                                {{ $books->lastPage() }}
+                            </a>
+                        @endif
+
+                    </div>
+
+
+                    {{-- NEXT --}}
+                    @if ($books->hasMorePages())
+                        <a href="{{ $books->nextPageUrl() }}#collection-top"
+                            class="flex size-12 items-center justify-center rounded-2xl bg-white border-2 border-slate-100 hover:border-primary text-slate-500 hover:text-primary transition-all shadow-sm">
+                            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+                        </a>
+                    @else
+                        <span
+                            class="flex size-12 items-center justify-center rounded-2xl bg-gray-100 text-gray-400 cursor-not-allowed">
+                            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+                        </span>
+                    @endif
+
                 </div>
-                <button
-                    class="flex size-12 items-center justify-center rounded-2xl bg-white border-2 border-slate-100 hover:border-primary text-slate-500 hover:text-primary transition-all shadow-sm">
-                    <span class="material-symbols-outlined text-2xl">chevron_right</span>
-                </button>
-            </div>
+            @endif
         </div>
     </main>
-
 @endsection
