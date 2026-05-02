@@ -4,7 +4,7 @@
 
 @section('content')
     <main class="layout-container flex h-full grow flex-col items-center w-full">
-        <div class="w-full max-w-[1400px] px-6 lg:px-8 py-10 flex flex-col gap-10">
+        <div class="w-full max-w-[1200px] px-6 lg:px-8 py-10 flex flex-col gap-10">
             <div class="flex flex-col md:flex-row items-center justify-between min-h-[480px] bg-cover bg-center bg-no-repeat rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-xl shadow-sky-200/50"
                 style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD-khyIKnefmWj0fqn55vC3UfE_14_BasfitlJyJkgmt9StKUxH0LEE0nDznyDsdiF3HkC2zKMKIOVDvNnGi4vPMuaSqhExHuOlG7a22DR5jKqTFCylYyBrToQ3T17C7ZU2AHRy758Fkotb7xV-35PIp8IkCTAJWpUx7e2zMJrcrqgEa62o5wY7LJaDlaoUVIjE7SyBwpp2VZqaiYb8sVN_-LoWKpdFRR9CymxjJFeJhhDoGHgAtjLtP3AnZ47rf4qgUmrO-GSaWik");'>
 
@@ -108,7 +108,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
 
                 @foreach ($books as $book)
-                    <div class="group relative flex flex-col h-full bg-white rounded-3xl p-4 shadow-soft border">
+                    <div class="group relative flex flex-col h-full bg-white rounded-3xl p-4 shadow-soft border hover:shadow-md transition">
 
                         {{-- CATEGORY --}}
                         {{-- <div class="absolute top-3 -right-3 z-10">
@@ -123,7 +123,7 @@
                         <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4">
 
                             {{-- IMAGE --}}
-                            <div class="absolute inset-0 bg-cover bg-center"
+                            <div class="absolute inset-0 bg-cover bg-center hover:scale-105 transition-transform duration-500"
                                 style="background-image: url('{{ $book->image ? asset('storage/' . $book->image) : 'https://picsum.photos/seed/' . $book->id . '/300/400' }}')">
                             </div>
 

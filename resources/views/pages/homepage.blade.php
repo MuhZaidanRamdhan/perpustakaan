@@ -3,8 +3,8 @@
 @section('title', 'Home')
 
 @section('content')
-    <div class="flex flex-1 justify-center py-5 w-full bg-background-soft">
-        <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 sm:px-8">
+    <div class="flex flex-1 justify-center py-5 w-full">
+        <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 px-4 py-10 sm:px-8">
 
             <div class="@container mb-12">
                 <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-3xl items-center justify-center p-8 relative overflow-hidden group shadow-xl shadow-sky-200/50"
