@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Activities')
+@section('title', 'Riwayat Buku Saya')
 @section('content')
 
     <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 py-8">

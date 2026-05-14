@@ -15,7 +15,27 @@
             {{ session('success') }}
         </div>
     @endif
+    
+    <div class="mb-4 flex justify-between items-center flex-wrap gap-3">
 
+            <form method="GET" action="{{ route('admin.books.index') }}">
+                <div class="flex gap-2">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama buku..."
+                        class="border rounded-lg px-4 py-2 text-sm w-64">
+
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                        Cari
+                    </button>
+
+                    @if (request('search'))
+                        <a href="{{ route('admin.books.index') }}" class="bg-gray-200 px-4 py-2 rounded-lg text-sm">
+                            Reset
+                        </a>
+                    @endif
+                </div>
+            </form>
+
+        </div>
     <div class="bg-white rounded shadow overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm border-collapse min-w-[800px]">
@@ -24,6 +44,7 @@
                         <th class="p-3 text-center">Cover</th>
                         <th class="p-3 text-left">Judul</th>
                         <th class="p-3 text-left">Author</th>
+                        {{-- <th class="p-3 text-left">Deskripsi</th> --}}
                         <th class="p-3 text-center">Stock</th>
                         <th class="p-3 text-left">Kategori</th>
                         <th class="p-3 text-center">Ebook PDF</th>
@@ -55,6 +76,11 @@
                             <td class="p-3">
                                 {{ $book->author }}
                             </td>
+
+                            {{-- deskripsi --}}
+                            {{-- <td class="p-3">
+                                {{ $book->description ?? 'belum ada deskripsi pada buku ini.' }}
+                            </td> --}}
 
                             {{-- STOCK --}}
                             <td class="p-3 text-center">

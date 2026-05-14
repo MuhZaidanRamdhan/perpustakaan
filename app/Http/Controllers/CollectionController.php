@@ -41,4 +41,14 @@ class CollectionController extends Controller
 
         return view('pages.collectionpage', compact('books', 'userBorrowings'));
     }
+
+    public function show(Book $book)
+    {
+        $borrow = Borrowing::where('user_id', auth()->id())
+            ->where('book_id', $book->id)
+            ->whereIn('status', ['pending', 'approved', 'borrowed'])
+            ->first();
+
+        return view('pages.collection-detail', compact('book', 'borrow'));
+    }
 }

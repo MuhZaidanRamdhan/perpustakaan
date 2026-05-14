@@ -11,21 +11,42 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
+        $categories = Categories::all();
+
+        // USER PAGE
+        if (!$request->is('admin/*')) {
+            $query = Book::with('category');
+
+            if ($request->category) {
+                $query->where('category_id', $request->category);
+            }
+
+            if ($request->search) {
+                $query->where('title', 'like', '%' . $request->search . '%');
+            }
+
+            $userbooks = $query->get();
+
+            return view('books.index', compact('userbooks', 'categories'));
+        }
+
+        // ADMIN PAGE
         $query = Book::with('category');
+
+        if ($request->search) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
 
         if ($request->category) {
             $query->where('category_id', $request->category);
         }
 
-        $userbooks = $query->get();
-        $adminbooks = $query->paginate(5);
-        $categories = Categories::all();
+        $adminbooks = $query
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
 
-        if ($request->is('admin/*')) {
-            return view('admin.books.index', compact('adminbooks', 'categories'));
-        }
-
-        return view('books.index', compact('userbooks', 'categories'));
+        return view('admin.books.index', compact('adminbooks', 'categories'));
     }
 
     public function create()
@@ -39,6 +60,7 @@ class BookController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'author' => 'required',
+            'description' => 'nullable',
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'ebook_file' => 'nullable|mimes:pdf|max:10240',
@@ -73,6 +95,7 @@ class BookController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'author' => 'required',
+            'description' => 'nullable',
             'stock' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'ebook_file' => 'nullable|mimes:pdf|max:10240',

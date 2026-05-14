@@ -37,9 +37,17 @@
                     placeholder="Masukkan nama author">
             </div>
 
+            {{-- Description --}}
+            <div>
+                <label class="block mb-2 font-medium text-slate-700">Deskripsi</label>
+                <textarea name="description"
+                    class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Masukkan deskripsi buku" rows="4"></textarea>
+            </div>
+
             {{-- Stock --}}
             <div>
-                <label class="block mb-2 font-medium text-slate-700">Stock</label>
+                <label class="block mb-2 font-medium text-slate-700">Stok</label>
                 <input type="number" name="stock"
                     class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Masukkan jumlah stok">

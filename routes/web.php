@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivitiesController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 | Redirect root
 |--------------------------------------------------------------------------
 */
-Route::get('/', [HomeController::class, 'page'])->middleware('guest');
+Route::get('/', [HomeController::class, 'page'])->name('Home');
 /*
 |--------------------------------------------------------------------------
 | PUBLIC (tanpa login)
@@ -25,12 +26,16 @@ Route::get('/books/{book}/read', [BookController::class, 'read']);
 
 // Route::get('/dashboard', fn() => view('dashboard'))->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/activities', [ActivitiesController::class, 'index'])
+Route::get('/peminjaman-buku', [ActivitiesController::class, 'index'])
     ->middleware('auth')
     ->name('Activities');
 
 // Route::get('/collection', [CollectionController::class, 'page'])->name('collection');
-Route::get('/collection', [CollectionController::class, 'index'])->name('collection');
+Route::get('/koleksi-buku', [CollectionController::class, 'index'])->name('collection');
+Route::get('/koleksi-buku/{book}', [CollectionController::class, 'show'])
+    ->name('collection.show');
+
+// Route::get('/beranda', [HomeController::class, 'page'])->name('Home');
 /*
 |--------------------------------------------------------------------------
 | AUTH USER
@@ -38,7 +43,6 @@ Route::get('/collection', [CollectionController::class, 'index'])->name('collect
 */
 Route::middleware('auth')->group(function () {
 
-    Route::get('/home', [HomeController::class, 'page'])->name('Home');
 
     Route::post('/borrow/{book}', [BorrowingController::class, 'store'])
         ->name('borrow.store');
@@ -83,6 +87,13 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('/books', BookController::class)
             ->except(['show']);
+
+        Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.index');
+        Route::get('/categories/create', [CategoriesController::class, 'create'])->name('categories.create');
+        Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
+        Route::get('/categories/{category}/edit', [CategoriesController::class, 'edit'])->name('categories.edit');
+        Route::put('/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
+        Route::delete('/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
     });
 
 require __DIR__ . '/auth.php';

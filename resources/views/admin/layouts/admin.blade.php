@@ -3,51 +3,68 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin')</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
     @vite('resources/css/app.css')
     <style>
         [x-cloak] {
             display: none !important;
         }
 
-        /* Paksa body tidak boleh kaku tingginya */
+        html,
         body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .admin-wrapper {
+            display: flex;
             min-height: 100vh;
+        }
+
+        .admin-main {
             display: flex;
             flex-direction: column;
+            flex: 1;
+            min-width: 0;
+            /* penting! cegah overflow horizontal */
+        }
+
+        .admin-content {
+            flex: 1;
         }
     </style>
 </head>
 
 <body class="bg-gray-100 antialiased text-gray-800">
 
-    <div x-data="{ open: false }">
-        {{-- SIDEBAR: Pake fixed biar konsisten --}}
+    <div x-data="{ open: false }" class="admin-wrapper">
+
+        {{-- SIDEBAR --}}
         <aside
             class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition duration-200 lg:translate-x-0"
             :class="open ? 'translate-x-0' : '-translate-x-full'" x-cloak>
             @include('admin.partials.sidebar')
         </aside>
 
-        {{-- MAIN CONTENT: Kasih margin-left 64 (w-64) supaya nggak ketumpuk sidebar --}}
-        <div class="lg:ml-64 flex flex-col min-h-screen">
+        {{-- MAIN CONTENT --}}
+        <div class="admin-main lg:ml-64">
 
             @include('admin.partials.header')
 
-            {{-- Bagian ini yang bakal nentuin tinggi --}}
-            <main class="flex-grow p-4 md:p-6">
-                <div class="max-w-full mx-auto bg-white rounded-lg shadow overflow-hidden">
-                    {{-- overflow-x-auto wajib ada supaya tabel nggak ngerusak layout kalau kepanjangan --}}
-                    <div class="overflow-x-auto p-4">
-                        @yield('content')
-                    </div>
+            <main class="admin-content p-4 md:p-6">
+                <div class="overflow-x-auto">
+                    @yield('content')
                 </div>
             </main>
 
             @include('admin.partials.footer')
         </div>
 
-        {{-- Overlay buat mobile --}}
+        {{-- Overlay mobile --}}
         <div x-show="open" @click="open = false" class="fixed inset-0 bg-black/50 z-40 lg:hidden" x-cloak></div>
     </div>
 

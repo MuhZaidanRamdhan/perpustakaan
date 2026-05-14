@@ -19,6 +19,12 @@
             Dashboard
         </a>
 
+        <a @click="open = false" href="{{ route('admin.categories.index') }}"
+            class="block px-4 py-2 rounded text-sm
+           {{ request()->routeIs('admin.categories.index') ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' }}">
+            Kategori
+        </a>
+
         <a @click="open = false" href="{{ route('admin.books.index') }}"
             class="block px-4 py-2 rounded text-sm
            {{ request()->routeIs('admin.books.*') ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' }}">
@@ -29,6 +35,12 @@
             class="block px-4 py-2 rounded text-sm
            {{ request()->routeIs('admin.borrowings.*') ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' }}">
             Peminjaman
+        </a>
+
+        <a @click="open = false" href="{{ route('Home') }}"
+            class="block px-4 py-2 rounded text-sm
+           {{ request()->routeIs('Home') ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' }}">
+            Beranda
         </a>
 
     </nav>

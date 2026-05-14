@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Home')
+@section('title', 'Beranda')
 
 @section('content')
     <div class="flex flex-1 justify-center py-5 w-full">
@@ -31,7 +31,7 @@
 
                 {{-- KOLEKSI --}}
                 <a class="flex items-center gap-4 p-6 rounded-2xl bg-white border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-200 transition-all group"
-                    href="/collection#collection-top">
+                    href="/koleksi-buku#collection-top">
 
                     <div
                         class="size-16 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -76,11 +76,10 @@
                 <div class="flex items-center justify-between px-2">
                     <div class="flex items-center gap-3">
                         <div class="w-2 h-8 rounded-full bg-accent"></div>
-                        <h2 class="text-slate-800 text-2xl font-bold leading-tight tracking-tight">Rekomendasi
-                            Minggu Ini</h2>
+                        <h2 class="text-slate-800 text-2xl font-bold leading-tight tracking-tight">Koleksi Terbaru</h2>
                     </div>
                     <a class="text-sky-600 hover:text-sky-700 text-sm font-bold flex items-center gap-1 group bg-sky-50 px-3 py-1.5 rounded-full hover:bg-sky-100 transition-colors"
-                        href="/collection#collection-top">
+                        href="/koleksi-buku#collection-top">
                         Lihat Semua
                         <span
                             class="material-symbols-outlined !text-[18px] transition-transform group-hover:translate-x-1">arrow_forward</span>
@@ -88,7 +87,7 @@
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
-                    @foreach ($randomBooks as $book)
+                    @foreach ($books as $book)
                         <div class="group flex flex-col gap-3 cursor-pointer">
 
                             {{-- IMAGE --}}

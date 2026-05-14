@@ -17,9 +17,13 @@
 
             {{-- Desktop Menu --}}
             <nav class="hidden md:flex items-center gap-8">
-                <a class="text-slate-600 hover:text-sky-600 font-bold" href="/">Beranda</a>
+                <a class="text-slate-600 hover:text-sky-600 font-bold" href={{ route('Home') }}>Beranda</a>
                 <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('collection') }}">Koleksi</a>
                 <a class="text-slate-600 hover:text-sky-600 font-bold" href="{{ route('Activities') }}">Aktivitas</a>
+                @if (Auth::check() && Auth::user()->role === 'admin')
+                    <a class="text-slate-600 hover:text-sky-600 font-bold"
+                        href="{{ route('admin.dashboard') }}">Admin</a>
+                @endif
             </nav>
 
             {{-- Desktop Auth Section --}}
@@ -53,7 +57,6 @@
                                 expand_more
                             </span>
                         </button>
-
                         {{-- Dropdown --}}
                         <div x-show="dropdown" @click.away="dropdown = false" x-transition
                             class="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg border border-slate-100 p-2">

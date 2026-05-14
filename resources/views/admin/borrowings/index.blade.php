@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('content')
-    <div class="p-6">
+    <div class="p-0">
         <h1 class="text-2xl font-semibold mb-6">Peminjaman</h1>
 
         @if (session('success'))
@@ -16,7 +16,28 @@
             </div>
         @endif
 
+        <div class="mb-4 flex justify-between items-center flex-wrap gap-3">
+
+            <form method="GET" action="{{ route('admin.borrowings.index') }}">
+                <div class="flex gap-2">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama user..."
+                        class="border rounded-lg px-4 py-2 text-sm w-64">
+
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">
+                        Cari
+                    </button>
+
+                    @if (request('search'))
+                        <a href="{{ route('admin.borrowings.index') }}" class="bg-gray-200 px-4 py-2 rounded-lg text-sm">
+                            Reset
+                        </a>
+                    @endif
+                </div>
+            </form>
+
+        </div>
         <div class="bg-white shadow rounded-2xl overflow-hidden">
+
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse min-w-[600px]">
                     <thead class="bg-gray-50 text-gray-600 text-xs uppercase">
@@ -32,7 +53,7 @@
                     </thead>
 
                     <tbody class="divide-y">
-                        @foreach ($borrowings as $borrow)
+                        @foreach ($adminBorrowings as $borrow)
                             @php
                                 $isLate = $borrow->due_date && !$borrow->returned_at && now()->gt($borrow->due_date);
                             @endphp
@@ -123,5 +144,8 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="mt-4">
+        {{ $adminBorrowings->links() }}
     </div>
 @endsection

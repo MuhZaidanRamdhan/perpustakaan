@@ -1,0 +1,39 @@
+@extends('admin.layouts.admin')
+
+@section('title', 'Tambah Kategori')
+
+@section('content')
+    <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border p-8">
+
+        <h2 class="text-2xl font-bold text-slate-800 mb-6">
+            Tambah Kategori
+        </h2>
+
+        @if ($errors->any())
+            <div class="mb-4 bg-red-100 text-red-600 p-4 rounded-xl">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+            @csrf
+
+            {{-- Judul --}}
+            <div>
+                <label class="block mb-2 font-medium text-slate-700">Nama Kategori</label>
+                <input type="text" name="name"
+                    class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Masukkan Nama Kategori">
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+                Simpan Kategori
+            </button>
+
+        </form>
+    </div>
+@endsection

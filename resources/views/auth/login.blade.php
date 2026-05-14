@@ -16,7 +16,7 @@
 
                 <div class="relative z-10 max-w-md">
                     <h2 class="text-4xl font-bold mb-6 leading-tight">
-                        Selamat Datang di Admin Perpus!
+                        Selamat Datang di Perpustakaan Kita!
                     </h2>
                     <p class="text-blue-100 leading-relaxed">
                         Kelola koleksi buku dan pantau peminjaman dengan lebih mudah dan cepat dalam satu platform.
@@ -54,11 +54,11 @@
                     <div>
                         <div class="flex justify-between text-sm">
                             <label class="font-medium text-gray-700">Password</label>
-                            @if (Route::has('password.request'))
+                            {{-- @if (Route::has('password.request'))
                                 <a href="{{ route('password.request') }}" class="text-blue-600 hover:underline">
                                     Lupa Password?
                                 </a>
-                            @endif
+                            @endif --}}
                         </div>
 
                         <div class="relative">
@@ -112,7 +112,7 @@
 
                 {{-- FOOTER --}}
                 <p class="text-center text-xs text-gray-400 mt-6">
-                    © {{ date('Y') }} Admin Perpus
+                    © {{ date('Y') }} Perpustakaan Kita
                 </p>
 
             </div>

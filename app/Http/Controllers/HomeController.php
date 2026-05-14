@@ -8,12 +8,8 @@ class HomeController extends Controller
 {
   public function page()
   {
+    $books = Book::latest()->take(5)->get();
 
-    $randomBooks = Book::with('category')
-      ->inRandomOrder()
-      ->take(5)
-      ->get();
-
-    return view('pages.homepage', compact('randomBooks'));
+    return view('pages.homepage', compact('books'));
   }
 }

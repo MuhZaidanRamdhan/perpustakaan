@@ -3,6 +3,17 @@
 @section('title', 'Edit Buku')
 
 @section('content')
+    <div class="mb-6">
+        <a href="{{ route('admin.books.index') }}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl shadow-sm hover:bg-blue-50 transition">
+
+            <span class="material-symbols-outlined text-[20px]">
+                arrow_back
+            </span>
+
+            Kembali ke Daftar Buku
+        </a>
+    </div>
     <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border p-8">
 
         <h2 class="text-2xl font-bold text-slate-800 mb-6">
@@ -20,7 +31,10 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.books.update', $book) }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+        {{-- Link kembali --}}
+
+        <form action="{{ route('admin.books.update', $book) }}" method="POST" enctype="multipart/form-data"
+            class="space-y-5">
             @csrf
             @method('PUT')
 
@@ -42,6 +56,16 @@
                 <input type="text" name="author" value="{{ old('author', $book->author) }}"
                     class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Masukkan nama author">
+            </div>
+
+            {{-- Description --}}
+            <div>
+                <label class="block mb-2 font-medium text-slate-700">
+                    Deskripsi
+                </label>
+                <textarea name="description" rows="4"
+                    class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Masukkan deskripsi buku">{{ old('description', $book->description) }}</textarea>
             </div>
 
             {{-- Stock --}}

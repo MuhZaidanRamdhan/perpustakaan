@@ -10,10 +10,22 @@ use Illuminate\Http\Request;
 
 class BorrowingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $borrowings = Borrowing::with(['user', 'book'])->latest()->get();
-        return view('admin.borrowings.index', compact('borrowings'));
+        $search = $request->search;
+
+        $query = Borrowing::with(['user', 'book'])
+            ->when($search, function ($q) use ($search) {
+                $q->whereHas('user', function ($userQuery) use ($search) {
+                    $userQuery->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest();
+
+        $adminBorrowings = $query->paginate(5)
+            ->withQueryString();
+
+        return view('admin.borrowings.index', compact('adminBorrowings'));
     }
 
     public function store(Book $book)

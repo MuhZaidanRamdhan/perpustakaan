@@ -15,7 +15,7 @@
 
                 <div class="relative z-10 max-w-md">
                     <h2 class="text-4xl font-bold mb-6 leading-tight">
-                        Buat Akun Admin Perpus
+                        Buat Akun Perpustakaan Kita!
                     </h2>
                     <p class="text-blue-100 leading-relaxed">
                         Daftar untuk mulai mengelola buku dan memantau peminjaman dengan mudah.
@@ -149,7 +149,7 @@
 
                 {{-- FOOTER --}}
                 <p class="text-center text-xs text-gray-400 mt-6">
-                    © {{ date('Y') }} Admin Perpus
+                    © {{ date('Y') }} Perpustakaan Kita
                 </p>
 
             </div>

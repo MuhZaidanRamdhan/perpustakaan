@@ -51,10 +51,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Borrowing::class);
     }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->role === 'admin';
-    }
-
 }

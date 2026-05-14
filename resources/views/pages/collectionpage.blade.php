@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Collection')
+@section('title', 'Koleksi Buku')
 
 @section('content')
     <main class="layout-container flex h-full grow flex-col items-center w-full">
@@ -108,7 +108,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
 
                 @foreach ($books as $book)
-                    <div class="group relative flex flex-col h-full bg-white rounded-3xl p-4 shadow-soft border hover:shadow-md transition">
+                    <div
+                        class="group relative flex flex-col h-full bg-white rounded-3xl p-4 shadow-soft border hover:shadow-md transition">
 
                         {{-- CATEGORY --}}
                         {{-- <div class="absolute top-3 -right-3 z-10">
@@ -120,37 +121,40 @@
                         </div> --}}
 
                         {{-- IMAGE --}}
-                        <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4">
+                        <a href="{{ route('collection.show', $book->id) }}">
+                            <div class="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4">
 
-                            {{-- IMAGE --}}
-                            <div class="absolute inset-0 bg-cover bg-center hover:scale-105 transition-transform duration-500"
-                                style="background-image: url('{{ $book->image ? asset('storage/' . $book->image) : 'https://picsum.photos/seed/' . $book->id . '/300/400' }}')">
+                                {{-- IMAGE --}}
+                                <div class="absolute inset-0 bg-cover bg-center hover:scale-105 transition-transform duration-500"
+                                    style="background-image: url('{{ $book->image ? asset('storage/' . $book->image) : 'https://picsum.photos/seed/' . $book->id . '/300/400' }}')">
+                                </div>
+
+                                {{-- STATUS (PINDAH KE SINI) --}}
+                                @php
+                                    $borrow = $userBorrowings[$book->id] ?? null;
+                                @endphp
+
+                                <div class="absolute top-3 left-3 z-10">
+                                    @if ($borrow)
+                                        <span
+                                            class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700 shadow">
+                                            Dipinjam
+                                        </span>
+                                    @elseif ($book->stock <= 0)
+                                        <span
+                                            class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-600 shadow">
+                                            Habis
+                                        </span>
+                                    @else
+                                        <span
+                                            class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-600 shadow">
+                                            Tersedia
+                                        </span>
+                                    @endif
+                                </div>
+
                             </div>
-
-                            {{-- STATUS (PINDAH KE SINI) --}}
-                            @php
-                                $borrow = $userBorrowings[$book->id] ?? null;
-                            @endphp
-
-                            <div class="absolute top-3 left-3 z-10">
-                                @if ($borrow)
-                                    <span
-                                        class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700 shadow">
-                                        Dipinjam
-                                    </span>
-                                @elseif ($book->stock <= 0)
-                                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-600 shadow">
-                                        Habis
-                                    </span>
-                                @else
-                                    <span
-                                        class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-600 shadow">
-                                        Tersedia
-                                    </span>
-                                @endif
-                            </div>
-
-                        </div>
+                        </a>
 
                         {{-- CONTENT --}}
                         <div class="flex flex-col gap-2 flex-grow">
@@ -173,21 +177,21 @@
                                 @if ($borrow->status === 'pending')
                                     <button
                                         class="flex-1  h-10 bg-yellow-100 text-yellow-700 rounded-xl font-semibold cursor-not-allowed">
-                                        Menunggu Persetujuan
+                                        Diproses
                                     </button>
 
                                     {{-- APPROVED --}}
                                 @elseif ($borrow->status === 'approved')
                                     <button
                                         class="flex-1 h-10 bg-orange-100 text-orange-700 rounded-xl font-semibold cursor-not-allowed">
-                                        Menunggu Diambil
+                                        Siap Diambil
                                     </button>
 
                                     {{-- BORROWED --}}
                                 @elseif ($borrow->status === 'borrowed')
                                     <button
                                         class="flex-1 h-10 bg-gray-200 text-gray-600 rounded-xl font-semibold cursor-not-allowed">
-                                        Sedang Dipinjam
+                                        Dipinjam
                                     </button>
                                 @endif
 
