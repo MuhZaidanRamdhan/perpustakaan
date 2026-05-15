@@ -1,5 +1,7 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Peminjaman')
+
 @section('content')
     <div class="p-0">
         <h1 class="text-2xl font-semibold mb-6">Peminjaman</h1>
@@ -53,7 +55,7 @@
                     </thead>
 
                     <tbody class="divide-y">
-                        @foreach ($adminBorrowings as $borrow)
+                        @forelse ($adminBorrowings as $borrow)
                             @php
                                 $isLate = $borrow->due_date && !$borrow->returned_at && now()->gt($borrow->due_date);
                             @endphp
@@ -139,7 +141,38 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="7" class="py-12 text-center">
+
+                                    <div class="flex flex-col items-center justify-center">
+
+                                        <div
+                                            class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                            <span class="material-symbols-outlined text-gray-400 text-3xl">
+                                                search_off
+                                            </span>
+                                        </div>
+
+                                        <h3 class="text-lg font-semibold text-slate-700">
+                                            Peminjaman tidak ditemukan
+                                        </h3>
+
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            Tidak ada peminjaman yang sesuai dengan pencarian
+                                            <span class="font-medium">"{{ request('search') }}"</span>
+                                        </p>
+
+                                        <a href="{{ route('admin.borrowings.index') }}"
+                                            class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-xl text-sm">
+                                            Lihat Semua Peminjaman
+                                        </a>
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

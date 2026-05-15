@@ -56,7 +56,10 @@ class BorrowingController extends Controller
             'status' => 'pending'
         ]);
 
-        return back()->with('success', 'Permintaan peminjaman dikirim');
+        // return back()->with('success', 'Permintaan peminjaman dikirim');
+        return redirect()
+            ->route('Activities')
+            ->with('success', 'Permintaan peminjaman dikirim');
     }
 
     public function myBorrowings()

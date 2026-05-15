@@ -12,7 +12,7 @@
                 Membuka jendela dunia untuk masa depan yang lebih cerah. Ayo membaca bersama kami!
             </p>
         </div>
-        <div class="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+        <div class="flex flex-wrap items-start justify-center gap-10 md:gap-16">
             <div class="flex flex-col gap-4 text-center md:text-left">
                 <h4 class="text-slate-900 font-bold text-sm uppercase tracking-wider text-sky-900">
                     Menu</h4>

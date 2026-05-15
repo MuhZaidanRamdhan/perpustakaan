@@ -3,10 +3,15 @@
 @section('title', 'Kategori Buku')
 
 @section('content')
-    <div class="flex justify-between mb-4">
-        <h1 class="text-2xl font-bold">Kategori Buku</h1>
-        <a href="{{ route('admin.categories.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
-            + Tambah Kategori
+    <div class="flex items-center justify-between gap-3 mb-5">
+
+        <h1 class="text-lg sm:text-2xl font-bold text-slate-800">
+            Kategori Buku
+        </h1>
+
+        <a href="{{ route('admin.categories.create') }}"
+            class="shrink-0 bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition">
+            + Tambah
         </a>
     </div>
 
@@ -38,7 +43,7 @@
     </div> --}}
     <div class="bg-white rounded shadow overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse min-w-[800px]">
+            <table class="w-full text-sm border-collapse min-w-[500px] md:min-w-full">
                 <thead class="bg-white">
                     <tr>
                         <th class="p-3 text-center">No</th>
@@ -52,7 +57,7 @@
                         <tr class="border-t hover:bg-gray-50">
 
                             <td class="p-3 text-center">
-                            {{ $loop->iteration }}
+                                {{ $loop->iteration }}
                             </td>
 
                             {{-- NAMA KATEGORI --}}
