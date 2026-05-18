@@ -17,11 +17,11 @@
                 <h4 class="text-slate-900 font-bold text-sm uppercase tracking-wider text-sky-900">
                     Menu</h4>
                 <a class="text-slate-500 hover:text-sky-600 transition-colors text-sm font-medium"
-                    href="#">Beranda</a>
+                    href={{ route('Home') }}>Beranda</a>
                 <a class="text-slate-500 hover:text-sky-600 transition-colors text-sm font-medium"
-                    href="#">Koleksi Buku</a>
+                    href={{ route('collection') }}>Koleksi Buku</a>
                 <a class="text-slate-500 hover:text-sky-600 transition-colors text-sm font-medium"
-                    href="#">Kegiatan</a>
+                    href={{ route('Activities') }}>Kegiatan</a>
             </div>
             <div class="flex flex-col gap-4 text-center md:text-left">
                 <h4 class="text-slate-900 font-bold text-sm uppercase tracking-wider text-sky-900">
@@ -45,7 +45,7 @@
     </div>
     <div
         class="flex flex-col-reverse md:flex-row justify-between items-center gap-6 border-t border-slate-100 pt-8 max-w-[1200px] mx-auto w-full">
-        <p class="text-slate-400 text-sm font-normal leading-normal">© 2023 Perpustakaan Kita.
+        <p class="text-slate-400 text-sm font-normal leading-normal">© 2026 Perpustakaan Kita.
             Dibuat dengan cinta untuk siswa.</p>
         <div class="flex gap-4">
             <a class="text-slate-300 hover:text-pink-500 transition-colors" href="#">

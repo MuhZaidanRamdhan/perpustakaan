@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivitiesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowingController;
@@ -94,6 +95,10 @@ Route::middleware(['auth', 'admin'])
         Route::get('/categories/{category}/edit', [CategoriesController::class, 'edit'])->name('categories.edit');
         Route::put('/categories/{category}', [CategoriesController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{category}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
+
+        Route::resource('/users', UserController::class)->names('users');
+        Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
+            ->name('users.updateRole');
     });
 
 require __DIR__ . '/auth.php';

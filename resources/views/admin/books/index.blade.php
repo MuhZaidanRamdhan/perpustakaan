@@ -84,7 +84,6 @@
                 <tbody>
                     @forelse ($adminbooks as $book)
                         <tr class="border-t hover:bg-gray-50">
-
                             {{-- COVER --}}
                             <td class="p-3 text-center">
                                 @if ($book->image)
@@ -147,11 +146,12 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('admin.books.destroy', $book) }}" method="POST">
+                                    <form action="{{ route('admin.books.destroy', $book) }}"
+                                        id="delete-form-{{ $book->id }}" method="POST">
                                         @csrf
                                         @method('DELETE')
 
-                                        <button onclick="return confirm('Yakin hapus?')"
+                                        <button type="button" onclick="confirmDelete({{ $book->id }})"
                                             class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-medium">
                                             Hapus
                                         </button>

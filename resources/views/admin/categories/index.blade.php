@@ -15,12 +15,6 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="bg-green-100 text-green-700 p-2 mb-4 rounded">
-            {{ session('success') }}
-        </div>
-    @endif
-
     {{-- <div class="mb-4 flex justify-between items-center flex-wrap gap-3">
 
         <form method="GET" action="{{ route('admin.categories.index') }}">
@@ -46,7 +40,6 @@
             <table class="w-full text-sm border-collapse min-w-[500px] md:min-w-full">
                 <thead class="bg-white">
                     <tr>
-                        <th class="p-3 text-center">No</th>
                         <th class="p-3 text-center">Nama Kategori</th>
                         <th class="p-3 text-center">Aksi</th>
                     </tr>
@@ -55,10 +48,6 @@
                 <tbody>
                     @foreach ($categories as $category)
                         <tr class="border-t hover:bg-gray-50">
-
-                            <td class="p-3 text-center">
-                                {{ $loop->iteration }}
-                            </td>
 
                             {{-- NAMA KATEGORI --}}
                             <td class="p-3 font-medium">
@@ -73,11 +62,12 @@
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="POST">
+                                    <form action="{{ route('admin.categories.destroy', $category) }}"
+                                        id="delete-form-{{ $category->id }}" method="POST">
                                         @csrf
                                         @method('DELETE')
 
-                                        <button onclick="return confirm('Yakin hapus?')"
+                                        <button type="button" onclick="confirmDelete({{ $category->id }})"
                                             class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-medium">
                                             Hapus
                                         </button>

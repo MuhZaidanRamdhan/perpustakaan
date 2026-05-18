@@ -6,18 +6,6 @@
     <div class="p-0">
         <h1 class="text-2xl font-semibold mb-6">Peminjaman</h1>
 
-        @if (session('success'))
-            <div class="mb-4 p-3 rounded-lg bg-green-100 text-green-700">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="mb-4 p-3 rounded-lg bg-red-100 text-red-700">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <div class="mb-4 flex justify-between items-center flex-wrap gap-3">
 
             <form method="GET" action="{{ route('admin.borrowings.index') }}">
@@ -68,6 +56,7 @@
                                     <span
                                         class="px-3 py-1 rounded-full text-xs
                             @if ($borrow->status == 'pending') bg-yellow-100 text-yellow-700
+                            @elseif($borrow->status == 'rejected') bg-red-100 text-red-700
                             @elseif($borrow->status == 'approved') bg-blue-100 text-blue-700
                             @elseif($borrow->status == 'borrowed' && $isLate) bg-red-100 text-red-700
                             @elseif($borrow->status == 'borrowed') bg-green-100 text-green-700
@@ -97,7 +86,8 @@
                                     @endif
                                 </td>
 
-                                <td class="px-4 py-3 text-center">
+                                <td
+                                    class="px-4 py-3 text-center {{ $borrow->returned_at > $borrow->due_date ? 'text-red-600 font-semibold' : '' }}">
                                     {{ $borrow->returned_at ? \Carbon\Carbon::parse($borrow->returned_at)->format('d M Y') : '-' }}
                                 </td>
 
@@ -129,11 +119,12 @@
                                             </form>
                                         @endif
 
-                                        <form action="{{ route('admin.borrowings.destroy', $borrow) }}" method="POST"
-                                            onsubmit="return confirm('Yakin hapus?')">
+                                        <form action="{{ route('admin.borrowings.destroy', $borrow) }}"
+                                            id="delete-form-{{ $borrow->id }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="bg-red-500 text-white px-2 py-1 rounded text-xs">
+                                            <button type="button" class="bg-red-500 text-white px-2 py-1 rounded text-xs"
+                                                onclick="confirmDelete({{ $borrow->id }})">
                                                 Hapus
                                             </button>
                                         </form>

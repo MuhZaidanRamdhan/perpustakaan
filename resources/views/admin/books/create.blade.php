@@ -48,7 +48,7 @@
             {{-- Stock --}}
             <div>
                 <label class="block mb-2 font-medium text-slate-700">Stok</label>
-                <input type="number" name="stock"
+                <input type="number" name="stock" min="0"
                     class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
                     placeholder="Masukkan jumlah stok">
             </div>

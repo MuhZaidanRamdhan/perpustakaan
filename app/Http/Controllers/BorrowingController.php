@@ -22,7 +22,7 @@ class BorrowingController extends Controller
             })
             ->latest();
 
-        $adminBorrowings = $query->paginate(5)
+        $adminBorrowings = $query->orderBy('id', 'asc')->paginate(5)
             ->withQueryString();
 
         return view('admin.borrowings.index', compact('adminBorrowings'));

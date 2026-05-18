@@ -71,9 +71,9 @@
             {{-- Stock --}}
             <div>
                 <label class="block mb-2 font-medium text-slate-700">
-                    Stock
+                    Stok
                 </label>
-                <input type="number" name="stock" value="{{ old('stock', $book->stock) }}"
+                <input type="number" min="0" name="stock" value="{{ old('stock', $book->stock) }}"
                     class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
 

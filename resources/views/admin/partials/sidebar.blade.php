@@ -37,6 +37,15 @@
             Dashboard
         </a>
 
+        <a @click="open = false" href="{{ route('admin.users.index') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition
+            {{ request()->routeIs('admin.users.*')
+                ? 'bg-blue-500 text-white shadow-md'
+                : 'text-slate-600 hover:bg-slate-100' }}">
+            <span class="material-symbols-outlined text-[20px]">person</span>
+            User
+        </a>
+
         <a @click="open = false" href="{{ route('admin.categories.index') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition
             {{ request()->routeIs('admin.categories.*')

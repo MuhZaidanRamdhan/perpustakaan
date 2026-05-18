@@ -42,7 +42,7 @@ class BookController extends Controller
         }
 
         $adminbooks = $query
-            ->latest()
+            ->orderBy('id', 'asc')
             ->paginate(5)
             ->withQueryString();
 
